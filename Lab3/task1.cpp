@@ -4,7 +4,7 @@ using namespace std;
 //All new marker pens will have an ink level of MAX;
 const int MAX = 100;
 
-class MarkerPen {
+class Planner {
 
     public:
         string brand;
@@ -14,7 +14,7 @@ class MarkerPen {
         bool refillability;
 
     public:
-        MarkerPen (string b, string c, bool r) {
+        Planner (string b, string c, bool r) {
             brand = b;
             color = c;
             inkLvl = MAX;
@@ -48,7 +48,7 @@ class MarkerPen {
 };
 
 int main () {
-    MarkerPen pen ("Signature", "blue", true);
+    Planner pen ("Signature", "blue", true);
 
     pen.write(60);
     if (pen.showInkLvl() < 20) {
@@ -57,7 +57,7 @@ int main () {
     pen.write(50);
     cout << "Pen Ink Level is " << pen.showInkLvl() << endl;
 
-    MarkerPen pen2 ("Signature", "blue", false);
+    Planner pen2 ("Signature", "blue", false);
     pen2.write(90);
     if (pen2.showInkLvl() < 20) {
         pen2.refill();
