@@ -1,11 +1,11 @@
 #include <iostream>
 using namespace std;
 
-class PLanner {
+class Planner {
     private:
         string** tasks;
         const string noTask = "No Task";
-        int months[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        const int months[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     public:
         Planner () {
@@ -19,7 +19,6 @@ class PLanner {
                     tasks[i][j] = noTask;
                 }
             }
-
         }
 
         ~Planner () {
@@ -29,8 +28,8 @@ class PLanner {
             delete [] tasks;
         }
 
-        void add (stirng task, int month, int day) {
-            if (tasks[month-1][day-1] == noTask) {
+        void add (string task, int month, int day) {
+            if (tasks[month-1][day-1] != noTask) {
                 cout << "A task already assigned for the day\n";
             }
             else {
@@ -52,7 +51,7 @@ class PLanner {
 };
 
 int main () {
-    Planner TaskPlanner();
+    Planner TaskPlanner;
 
     int choice;
 
@@ -65,12 +64,12 @@ int main () {
         cout << "Enter your choice: ";
         cin >> choice;
 
+        int month; 
+        int day; 
+        string task;
+
         switch (choice) {
             case 1: 
-            int month; 
-            int day; 
-            string task;
-
             cout << "Enter month: ";
             cin >> month;
             cout << "Enter day: ";
@@ -81,10 +80,7 @@ int main () {
             TaskPlanner.add(task, month, day); 
             break;
 
-            case 2: 
-            int month; 
-            int day; 
-
+            case 2:
             cout << "Enter month: ";
             cin >> month;
             cout << "Enter day: ";
@@ -94,12 +90,10 @@ int main () {
             break;
 
             case 3: 
-            int month;
-
             cout << "Enter month: ";
-            cin >> month
+            cin >> month;
 
-            display(month); 
+            TaskPlanner.display(month); 
             break;
 
             case 4: 
