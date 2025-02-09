@@ -87,6 +87,10 @@ class GroceryStore {
     void AddItemToCart (string name, int amount) {
         for (int i = 0; i < productsInCart; i++) {
             if (productName[cart[i][0]] == name) {
+                if (productStock[cart[i][0]] < amount) {
+                    cout << "Not enough stock\n";
+                    return;
+                }
                 cart[i][1] += amount;
                 cout << "Item successfully added\n";
                 return;
@@ -115,6 +119,10 @@ class GroceryStore {
             return;
         }
 
+        if (productStock[temp[productsInCart][0]] < amount) {
+            cout << "Not enough stock\n";
+            return;
+        }
         temp[productsInCart][1] = amount;
 
         for (int i = 0; i < productsInCart; i++) {
@@ -156,6 +164,7 @@ class GroceryStore {
             delete [] cart[i];
         }
         delete [] cart;
+        cart = nullptr;
         productsInCart = 0;
     }
 };
@@ -186,7 +195,8 @@ int main () {
         switch (choice) {
             case 1: 
             cout << "Enter name of item: ";
-            cin >> name;
+            cin.ignore();
+            getline(cin, name);
             cout << "Enter price of item: ";
             cin >> price;
             cout << "Enter stock of item: ";
@@ -197,7 +207,8 @@ int main () {
 
             case 2:
             cout << "Enter name of item: ";
-            cin >> name;
+            cin.ignore();
+            getline(cin, name);
             cout << "Enter new price: ";
             cin >> price;
 
@@ -206,7 +217,8 @@ int main () {
 
             case 3: 
             cout << "Enter name of item: ";
-            cin >> name;
+            cin.ignore();
+            getline(cin, name);
             cout << "Enter new stock: ";
             cin >> stock;
 
@@ -215,7 +227,8 @@ int main () {
 
             case 4: 
             cout << "Enter name of item: ";
-            cin >> name;
+            cin.ignore();
+            getline(cin, name);
             cout << "Enter amount: ";
             cin >> amount;
 

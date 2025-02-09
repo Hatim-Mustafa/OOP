@@ -75,7 +75,8 @@ int main () {
             cout << "Enter day: ";
             cin >> day;
             cout << "Enter task: ";
-            cin >> task;
+            cin.ignore();
+            getline(cin, task);
 
             TaskPlanner.add(task, month, day); 
             break;
