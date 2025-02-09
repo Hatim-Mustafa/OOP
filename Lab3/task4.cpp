@@ -7,14 +7,16 @@ class Laptop {
         string model;
         int RAM;
         int storage;
+        string processor;
         bool on;
 
     public:
-        Laptop (string b, string m, int r, int s) {
+        Laptop (string b, string m, int r, int s, string p) {
             brand = b;
             model = m;
             RAM = r;
             storage = s;
+            processor = p;
             on = false;
         }
 
@@ -42,6 +44,7 @@ class Laptop {
             cout << "Model is " << model << endl;
             cout << "RAM (in GB) is " << RAM << endl;
             cout << "Storage (in GB) is " << storage << endl;
+            cout << "Processor is " << processor << endl;
         }
 
         void compare(Laptop other) {
@@ -62,8 +65,8 @@ class Laptop {
 };
 
 int main () {
-    Laptop BilalLaptop ("hp", "10rdf", 8, 256);
-    Laptop AyeshaLaptop ("dell", "Latitude7460", 16, 512);
+    Laptop BilalLaptop ("hp", "10rdf", 8, 256, "intel");
+    Laptop AyeshaLaptop ("dell", "Latitude7460", 16, 512, "AMD");
 
     BilalLaptop.compare(AyeshaLaptop);
 }
