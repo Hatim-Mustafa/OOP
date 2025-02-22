@@ -23,11 +23,7 @@ class Skill {
         description = desc;
     }
 
-    Skill () {
-        skillID = -1;
-        name = "";
-        description = "";
-    }
+    Skill () {}
 
     void showSkillDetails() {
         cout << "Skill ID: " << skillID << endl;
@@ -57,16 +53,51 @@ class Sport {
         requiredSkills = nullptr;
     }
 
+    Sport (const Sport& other) {
+        sportID = other.sportID;
+        name = other.name;
+        description = other.description;
+        numOfSkills = other.numOfSkills;
+
+        if (other.requiredSkills != nullptr) {
+            requiredSkills = new Skill[numOfSkills];
+            for (int i = 0; i < numOfSkills; i++) {
+                requiredSkills[i] = other.requiredSkills[i];
+            }
+        } else {
+            requiredSkills = nullptr;
+        }
+    }
+
     Sport () {
-        sportID = -1;
-        name = "";
-        description = "";
-        numOfSkills = 0;
         requiredSkills = nullptr;
     }
 
     ~Sport () {
-        delete [] requiredSkills;
+        if (requiredSkills != nullptr) {
+            delete [] requiredSkills;
+            requiredSkills = nullptr;
+        }
+    }
+
+    Sport& operator=(const Sport& other) {
+        if (this != &other) { 
+            delete[] requiredSkills; 
+            sportID = other.sportID;
+            name = other.name;
+            description = other.description;
+            numOfSkills = other.numOfSkills;
+            
+            if (other.requiredSkills) {
+                requiredSkills = new Skill[numOfSkills];
+                for (int i = 0; i < numOfSkills; i++) {
+                    requiredSkills[i] = other.requiredSkills[i];
+                }
+            } else {
+                requiredSkills = nullptr;
+            }
+        }
+        return *this;
     }
 
     void addSkill(Skill s) {
@@ -128,18 +159,58 @@ class Student {
         mentorAssigned = nullptr;
     }
 
+    Student(const Student& other) {
+        studentID = other.studentID;
+        name = other.name;
+        age = other.age;
+        numOfSportInterests = other.numOfSportInterests;
+
+        if (other.sportsInterests) {
+            sportsInterests = new Sport[numOfSportInterests];
+            for (int i = 0; i < numOfSportInterests; i++) {
+                sportsInterests[i] = other.sportsInterests[i];
+            }
+        } else {
+            sportsInterests = nullptr;
+        }
+
+        mentorAssigned = other.mentorAssigned;
+    }
+
     Student () {
-        studentID = -1;
-        name = "";
-        age = -1;
         sportsInterests = nullptr;
-        numOfSportInterests = 0;
-        mentorAssigned = nullptr;
     }
 
     ~Student () {
-        delete [] sportsInterests;
+        if (sportsInterests != nullptr) {
+            delete [] sportsInterests;
+            sportsInterests = nullptr;
+        }
     }
+
+    Student& operator=(const Student& other) {
+        if (this != &other) {
+            delete[] sportsInterests;
+            
+            studentID = other.studentID;
+            name = other.name;
+            age = other.age;
+            numOfSportInterests = other.numOfSportInterests;
+            
+            if (other.sportsInterests) {
+                sportsInterests = new Sport[numOfSportInterests];
+                for (int i = 0; i < numOfSportInterests; i++) {
+                    sportsInterests[i] = other.sportsInterests[i];
+                }
+            } else {
+                sportsInterests = nullptr;
+            }
+
+            mentorAssigned = other.mentorAssigned;
+        }
+        return *this;  
+    }
+    
 
     void registerForMentorship (Mentor* m);
 
@@ -154,7 +225,7 @@ class Student {
         delete [] sportsInterests;
         sportsInterests = temp;
         numOfSportInterests++;
-        cout << "Sport added\n";
+        cout << s.name << " Sport added\n";
     }
 
     void displayDetails () {
@@ -169,31 +240,51 @@ class Mentor {
     int mentorID;
     string name;
     Sport* sportsExpertise;
+    int numOfSportExpertise;
     int MaxLearners;
     Student* AssignedLearners;
     int numOfAssignedLearners;
 
     public:
-    Mentor (int id, string name, int m, Sport* s){
+    Mentor (int id, string name, int m, Sport* s, int n){
         mentorID = id;
         this->name = name;
         MaxLearners = m;
         AssignedLearners = nullptr;
         numOfAssignedLearners = 0;
-        sportsExpertise = s;
+        numOfSportExpertise = n;
+        sportsExpertise = new Sport[n];
+        for (int i = 0; i < n; i++) {
+            sportsExpertise[i] = s[i];
+        }
+    }
+
+    Mentor(const Mentor& other) {
+        mentorID = other.mentorID;
+        name = other.name;
+        MaxLearners = other.MaxLearners;
+        numOfAssignedLearners = other.numOfAssignedLearners;
+        numOfSportExpertise = other.numOfSportExpertise;
+    
+        sportsExpertise = new Sport[numOfSportExpertise];
+        for (int i = 0; i < numOfSportExpertise; i++) {
+            sportsExpertise[i] = Sport(other.sportsExpertise[i]);
+        }
+        AssignedLearners = new Student[numOfAssignedLearners];
+        for (int i = 0; i < numOfAssignedLearners; i++) {
+            AssignedLearners[i] = other.AssignedLearners[i];
+        }
     }
 
     Mentor () {
-        mentorID = -1;
-        name = "";
         AssignedLearners = nullptr;
-        numOfAssignedLearners = 0;
-        MaxLearners = 0;
     }
 
     ~Mentor () {
         delete [] sportsExpertise;
+        sportsExpertise = nullptr;
         delete [] AssignedLearners;
+        AssignedLearners = nullptr;
     }
 
     void displayDetails () {
@@ -230,6 +321,14 @@ class Mentor {
 
         if (index == -1) {
             cout << "Student is not in the list\n";
+            return;
+        }
+
+        if (numOfAssignedLearners - 1 == 0) {
+            delete [] AssignedLearners;
+            AssignedLearners = nullptr;
+            numOfAssignedLearners = 0;
+            cout << "Student removed\n";
             return;
         }
 
@@ -272,6 +371,44 @@ void Student::viewMentorDetails () {
 }
 
 int main () {
+    Skill skill1 (0, "Catching", "Be able to catch a ball");
+    Skill skill2 (1, "Kicking", "Precisely Kicking the ball");
+    Skill skill3 (2, "Hand Eye Coordination", "Eyes and hands both focused at a single point");
+    Skill skill4 (3, "Quick Reflexes", "Being able to react and move at a fast pace");
 
+    Sport sport1 (0, "Cricket", "Sport about a bat and ball");
+    sport1.addSkill(skill1);
+    sport1.addSkill(skill3);
+    sport1.addSkill(skill4);
+
+    Sport sport2 (1, "Football", "Sport about kicking a ball into a goal");
+    sport1.addSkill(skill2);
+    sport1.addSkill(skill4);
+
+    Sport sport3 (2, "Badminton", "Sport about hitting a shuttlecock with a racket");
+    sport1.addSkill(skill3);
+    sport1.addSkill(skill4);
+
+    Student student1 (0, "Hatim", 19);
+    student1.updateSportsInterest(sport1);
+    student1.updateSportsInterest(sport3);
+
+    Student student2 (1, "Robert", 18);
+    student2.updateSportsInterest(sport1);
+    student2.updateSportsInterest(sport2);
+    
+    Sport s[] = {sport2};
+    Mentor mentor1 (0, "Hamid", 5, s, 1);
+    
+    Sport s1[] = {sport1, sport3};
+    Mentor mentor2 (1, "Jawed", 4, s1, 2);
+
+    student1.registerForMentorship(&mentor2);
+
+    student2.registerForMentorship(&mentor1);
+
+    mentor1.provideGuidance();
+    mentor2.provideGuidance();
+
+    mentor1.removeLearner(student2);
 }
-
