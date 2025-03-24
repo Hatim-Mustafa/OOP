@@ -58,12 +58,11 @@ class Account {
     void printStatement () {
         for (int i = 0; i < numOfTransactions; i++) {
             if (transactions[i] > 0) {
-                cout << "Deposited ";
+                cout << "Deposited " << "$" << transactions[i] << endl;;
             }
             else {
-                cout << "Withdrawn ";
+                cout << "Withdrawn " << "$" << -transactions[i] << endl;;
             }
-            cout << "$" << transactions[i] << endl;
         }
     }
 
@@ -73,6 +72,7 @@ class Account {
 };
 
 class CheckingsAccount: public Account {
+    public:
     CheckingsAccount(int an, float b, string a): Account(an, b, a, "Checking") {}
 
 };
@@ -114,5 +114,13 @@ class FixedDepositAccount: public Account {
 };
 
 int main() {
+    CheckingsAccount ca (100, 12000, "XYZ");
+    SavingsAccount sa (1873, 50000, "ABC", 0.04, 10000);
+
+    ca.deposit(1000);
+    ca.withdraw(1200);
+    ca.printStatement();
+
+    sa.withdraw(44000);
     
 }   
