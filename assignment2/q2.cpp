@@ -1,27 +1,42 @@
+//24K-0673
+//HATIM MUSTAFA
+
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Ghost {
     public:
-    string nameOfWoker;
+    string nameOfFirstWorker;
+    string nameOfSecondWorker;
     int scareLvl;
+    string label;
 
-    Ghost (string n, int s): nameOfWoker(n), scareLvl(s) {}
+    Ghost (string n, int s, string l): nameOfFirstWorker(n), scareLvl(s), nameOfSecondWorker(""), label(l) {}
 
     virtual void Haunt () {
         cout << "Booooooooo\n";
     }
 
-    // void operator << () {
-    //     cout << "Name of Worker: " << nameOfWoker << endl;
-    //     cout << "Scare Level: " << scareLvl << endl;
-    // }
+    friend ostream& operator<<(ostream& stream, const Ghost& g) {
+        stream << g.label <<  " (" << g.nameOfFirstWorker << ") - scare: " << g.scareLvl;
+        return stream;
+    }
 
+    void operator + (Ghost& other) {
+        nameOfSecondWorker = other.nameOfFirstWorker;
+        if (scareLvl + other.scareLvl > 10) {
+            scareLvl = 10;
+        }
+        else {
+            scareLvl += other.scareLvl;
+        }
+    }
 };
 
 class Poltergeist: public Ghost {
     public:
-    Poltergeist (string n, int s): Ghost(n,s) {}
+    Poltergeist (string n, int s, string l): Ghost(n,s,l) {}
 
     void Haunt () override {
         cout << "Objects Moving\n";
@@ -30,7 +45,7 @@ class Poltergeist: public Ghost {
 
 class Banshee: public Ghost {
     public:
-    Banshee (string n, int s): Ghost(n,s) {}
+    Banshee (string n, int s, string l): Ghost(n,s,l) {}
 
     void Haunt () override {
         cout << "Loud Screams\n";
@@ -39,7 +54,7 @@ class Banshee: public Ghost {
 
 class ShadowGhost: public Ghost {
     public:
-    ShadowGhost (string n, int s): Ghost(n,s) {}
+    ShadowGhost (string n, int s, string l): Ghost(n,s,l) {}
 
     void Haunt () override {
         cout << "Creepy Whispers\n";
@@ -48,7 +63,7 @@ class ShadowGhost: public Ghost {
 
 class ShadowPoltergeist: public Ghost {
     public:
-    ShadowPoltergeist (string n, int s): Ghost(n,s) {}
+    ShadowPoltergeist (string n, int s, string l): Ghost(n,s,l) {}
 
     void Haunt () override {
         cout << "Moving Objects and Creepy Whispers\n";
@@ -110,7 +125,9 @@ class Visitor {
 
 void Visit (HauntedHouse* house, Visitor* v, int numOfVisitors) {
     for (int i = 0; i < numOfVisitors; i++) {
+        cout << v[i].name << "'s Reactions\n";
         for (int j = 0; j < 3; j++) {
+            cout << *(house->ghosts[j]) << endl;
             house->ghosts[j]->Haunt();
             v[i].ScareReaction(house->ghosts[j]);
         }
@@ -124,10 +141,10 @@ int main () {
     visitors[1] = Visitor("Allen", 'C');
     visitors[2] = Visitor("Josh", 'F');
 
-    Poltergeist p("Albert", 6);
-    Banshee b("Emma", 8);
-    ShadowGhost sg("Robert", 2);
-    ShadowPoltergeist sp("Robert", 8);
+    Poltergeist p("Albert", 6, "Poltergeist");
+    Banshee b("Emma", 8, "Banshee");
+    ShadowGhost sg("Robert", 2, "Shadow Ghost");
+    ShadowPoltergeist sp("William", 8, "Shadow Poltergeist");
 
     Ghost* ghosts1[] = {&sp, &sg, &p};
     Ghost* ghosts2[] = {&sg, &b, &p};
@@ -136,7 +153,9 @@ int main () {
     houses[0] = HauntedHouse("Barren Creek", ghosts1);
     houses[1] = HauntedHouse("Hallway of Death", ghosts2);
 
+    cout << houses[0].name << endl;
     Visit(&houses[0], visitors, 3);
+    cout << houses[1].name << endl;
     Visit(&houses[1], visitors, 3);
 
     delete [] visitors;
