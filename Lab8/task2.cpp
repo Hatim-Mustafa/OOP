@@ -33,5 +33,6 @@ int main () {
     Librarian L;
     b.display();
     L.applyDiscount(b);
+    cout << "Details after applying discount\n";
     b.display();
 }

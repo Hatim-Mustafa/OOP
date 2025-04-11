@@ -30,5 +30,5 @@ float calculateHeatIndex (Temperature& t, Humidity& h) {
 int main () {
     Temperature t;
     Humidity h;
-    cout << calculateHeatIndex(t, h) << endl;
+    cout << "Heat Index: " << calculateHeatIndex(t, h) << endl;
 }
