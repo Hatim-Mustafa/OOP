@@ -1,0 +1,113 @@
+Here's a detailed **class structure** (UML-style outline) for your Transport Management System based on OOP principles like inheritance, composition, aggregation, and file handling.
+
+---
+
+### **Core Classes**
+
+#### 1. `User` (Abstract Base Class)
+- `id: string`
+- `name: string`
+- `email: string`
+- `hasPaid: bool`
+- **Methods:**
+  - `makePayment()`
+  - `getFare(vehicle: Vehicle): float` *(abstract)*
+
+#### 2. `Student` (Inherits User)
+- **Overrides:**
+  - `getFare(vehicle)`
+
+#### 3. `Faculty` (Inherits User)
+- **Overrides:**
+  - `getFare(vehicle)`
+
+---
+
+#### 4. `Transporter`
+- `name: string`
+- `vehicles: List<Vehicle>`
+- `drivers: List<Driver>`
+routes
+---
+
+#### 5. `Vehicle` (Abstract Base Class)
+- `id: string`
+- `isAC: bool`
+- `driver: Driver` *(composition)*
+- `route: Route`
+- `seats: List<Seat>`
+- `transporter: Transporter`
+- **Methods:**
+  - `allocateSeat(user: User): void`
+  - `isSeatAvailable(seatNo: int, userType: str): bool`
+  - `getTotalSeats(): int`
+
+#### 6. `Bus` (Inherits Vehicle)
+- Seats: 52
+
+#### 7. `Coaster` (Inherits Vehicle)
+- Seats: 32
+
+---
+
+#### 8. `Seat`
+- `seatNo: int`
+- `isBooked: bool`
+- `userType: str` *(either 'student' or 'faculty')*
+- `bookedBy: User (nullable)`
+
+---
+
+#### 9. `Driver`
+- `id: string`
+- `name: string`
+- `licenseNo: string`
+- `assignedVehicle: Vehicle (optional)` *(1 at a time)*
+
+---
+
+#### 10. `Route`
+- `startLocation: string`
+- `endLocation: string`
+- `distance: float`
+- `isLongRoute(): bool`
+
+---
+
+#### 11. `Booking`
+- `user: User`
+- `vehicle: Vehicle`
+- `seat: Seat`
+- `route: Route`
+- `fare: float`
+- `date: Date`
+
+---
+
+### **System & Utility Classes**
+
+#### 12. `TransportSystem`
+- `users: List<User>`
+- `vehicles: List<Vehicle>`
+- `bookings: List<Booking>`
+- `routes: List<Route>`
+- `transporters: List<Transporter>`
+- `drivers: List<Driver>`
+- **Methods:**
+  - `registerUser(...)`
+  - `assignDriverToVehicle(...)`
+  - `defineRoute(...)`
+  - `bookSeat(...)`
+  - `saveToFile()`
+  - `loadFromFile()`
+
+---
+
+### **Exceptions**
+
+- `class SeatUnavailableException(Exception)`
+- `class BookingWithoutPaymentException(Exception)`
+- `class InvalidSeatAssignmentException(Exception)`
+- `class EntityNotFoundException(Exception)`
+
+---
